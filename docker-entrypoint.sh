@@ -61,6 +61,13 @@ print(container['Name'])
     exit 1
   fi
 
+  if [ -n "${INPUT_PATH+1}" ]; then
+    setConfiguration "INPUT_PATH" "$INPUT_PATH"
+  else
+    echo "INPUT_PATH is needed"
+    exit 1
+  fi
+
   if [ -n "${SHIPPER_NAME+1}" ]; then
     setConfiguration "SHIPPER_NAME" "$SHIPPER_NAME"
   else

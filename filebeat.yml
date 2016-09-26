@@ -14,7 +14,8 @@ filebeat:
       #paths:
         #- /var/log/*.log
         #- c:\programdata\elasticsearch\logs\*
-
+      paths:
+        - {{INPUT_PATH}}
       # Configure the file encoding for reading files with international characters
       # following the W3C recommendation for HTML5 (http://www.w3.org/TR/encoding).
       # Some sample encodings:
@@ -28,7 +29,7 @@ filebeat:
       # Possible options are:
       # * log: Reads every line of the log file (default)
       # * stdin: Reads the standard in
-      input_type: stdin
+      input_type: log
 
       # Exclude lines. A list of regular expressions to match. It drops the lines that are
       # matching any regular expression from the list. The include_lines is called before
@@ -63,7 +64,7 @@ filebeat:
       # Type to be published in the 'type' field. For Elasticsearch output,
       # the type defines the document type these entries should be stored
       # in. Default: log
-      document_type: filebeat-docker-logs
+      document_type: log
 
       # Scan frequency in seconds.
       # How often these files should be checked for changes. In case it is set
