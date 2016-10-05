@@ -29,7 +29,7 @@ filebeat:
       # Possible options are:
       # * log: Reads every line of the log file (default)
       # * stdin: Reads the standard in
-      input_type: log
+      #input_type: plain
 
       # Exclude lines. A list of regular expressions to match. It drops the lines that are
       # matching any regular expression from the list. The include_lines is called before

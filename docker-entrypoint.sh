@@ -37,16 +37,6 @@ print(container['Name'])
     rm "$CONTAINERS_FOLDER/$1"
   }
 
-  collectContainerLogs() {
-    local CONTAINER=$1
-    echo "Processing $CONTAINER..."
-    createContainerFile $CONTAINER
-    CONTAINER_NAME=`getContainerName $CONTAINER`
-    curl -s --no-buffer -XGET --unix-socket /tmp/docker.sock "http:/containers/$CONTAINER/logs?stderr=1&stdout=1&tail=1&follow=1" | sed "s;^;[$CONTAINER_NAME] ;" > $NAMED_PIPE
-    echo "Disconnected from $CONTAINER."
-    removeContainerFile $CONTAINER
-  }
-
   if [ -n "${LOGSTASH_HOST+1}" ]; then
     setConfiguration "LOGSTASH_HOST" "$LOGSTASH_HOST"
   else
@@ -82,16 +72,7 @@ print(container['Name'])
   echo "Initializing Filebeat..."
   cat $NAMED_PIPE | ${FILEBEAT_HOME}/filebeat -e -v &
 
-  while true; do
-    CONTAINERS=`getRunningContainers`
-    for CONTAINER in $CONTAINERS; do
-      if ! ls $CONTAINERS_FOLDER | grep -q $CONTAINER; then
-        collectContainerLogs $CONTAINER &
-      fi
-    done
-    sleep 5
-  done
-
+  filebeat -c ${FILEBEAT_HOME}/filebeat.yml -v -d '*'
 else
   exec "$@"
 fi
